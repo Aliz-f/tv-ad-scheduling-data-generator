@@ -1,0 +1,11 @@
+{
+  "config__time_scale": 24,
+  "config__commercial_count": [5, 6, 7, 8, 9, 10],
+  "config__commercial_duration": [15, 30],
+  "config__commercial_min_count": [2, 3, 4],
+  "config__commercial_max_count": [6, 7, 8],
+  "config__break_count": [5, 6, 7],
+  "config__break_length": [120, 90],
+  "config__budget_chance": [10, 20, 30],
+  "config__penalty_random": [8, 9, 10, 11, 12]
+}
