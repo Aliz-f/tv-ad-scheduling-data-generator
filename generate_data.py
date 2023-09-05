@@ -64,7 +64,7 @@ def manage_reach_price(breaks: dict, max_position: int) -> np.array:
                 tmp.append(0)
             random = uniform(1, 1.9)
             tmp_reach.append([int(random * t) for t in tmp])
-            tmp_price.append([int(3.5 * random * t) for t in tmp])
+            tmp_price.append([int(4.5 * random * t) for t in tmp])
 
     price = np.array(tmp_price)
     reach = np.array(tmp_reach)
@@ -118,8 +118,9 @@ def manage_budget(price: np.array, commercial: dict, budget_chance: list, reach:
     price_mean = int(np.mean(price[price != 0]))+1
     reach_mean = int(np.mean(reach[reach != 0]))+1
     for each_comm in commercial['list']:
-        mean = (each_comm['max'] + each_comm['min']) // 2
+        mean = each_comm['max']
         tmp_price = mean * each_comm['duration'] * price_mean
+        mean = (each_comm['max'] + each_comm['min']) // 2
         tmp_reach = mean * each_comm['duration'] * reach_mean
         chance = randint(0, 1)
         if chance == 0:
@@ -151,7 +152,7 @@ def manage_time(commercial: dict, break_length: list):
             commercial['list'][i]["release_time"] = 0
         elif commercial['count'] // 2 <= i < commercial['count'] // (3/4):
             tmp = randint(0, (end_time // 4))
-            commercial['list'][i]["due_time"] = tmp + end_time // (3/4)
+            commercial['list'][i]["due_time"] = int(tmp + end_time // (3/4))
             commercial['list'][i]["release_time"] = tmp
         else:
             tmp = randint(0, (end_time * 0.4))
@@ -242,5 +243,5 @@ if __name__ == "__main__":
         "competitors": []
     }
 
-    with open(f"data/small_data_{datetime.now()}.json", "w") as json_file:
+    with open(f"data/small_data_{datetime.now().strftime('%Y_%m_%d__%H_%M_%S')}.json", "w") as json_file:
         json.dump(data, json_file, indent=4)
