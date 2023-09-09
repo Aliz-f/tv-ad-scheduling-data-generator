@@ -9,14 +9,14 @@ def generate_data(commercials, breaks, time_scale, competitors=[]):
     time_scale = time_scale  # Second
 
     duration_random = [15, 30]
-    copy_random = [1, 2, 3, 4]
-    breaks_random = [120, 180]
-    penalty_random = [10, 12, 15]
+    copy_random = [1, 2, 3, 4, 5, 6]
+    breaks_random = [60, 90]
+    penalty_random = [10, 12, 15, 8, 9, 11]
     #TODO: reduce price and reach (price per second & reach per second)
-    price_random = [40, 50, 60, 70, 80, 90]
-    reach_random = [40, 50, 60, 70, 80, 90]
-    budget_random = [70, 80, 90, 95, 73, 150, 100, 170, 200, 210]
-    required_reach_random = [70, 80, 90, 95, 73, 150, 100, 170, 200, 210]
+    price_random = [4, 5, 6, 7, 8, 9]
+    reach_random = [4, 5, 6, 7, 8, 9]
+    budget_random = [580, 600, 800, 900, 700, 500, 960, 1200, 1350, 1400, 1700, 1600, 1500]
+    required_reach_random = [270, 380, 490, 395, 473, 150, 100, 170, 200, 210]
 
     # --------------------------------------- commercial ---------------------------------------------------
     commercial_duration = [random.choice(duration_random) for i in range(commercials)]

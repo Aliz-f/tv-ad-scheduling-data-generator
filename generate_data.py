@@ -3,7 +3,7 @@ import json
 from random import choice, uniform, randint
 import numpy as np
 from datetime import datetime
-
+from os import path, mkdir
 
 def read_config(config_path: str) -> tuple:
     try:
@@ -51,7 +51,7 @@ def manage_reach_price(breaks: dict, max_position: int) -> np.array:
     for key, value in breaks.items():
         for each_break in range(value['count']):
             tmp = list()
-            for i in range(value['positions'][each_break]):
+            for i in range(int(value['positions'][each_break])):
                 half = value['positions'][each_break] // 2
                 if i < half:
                     tmp.append(max_position + 1-i)
@@ -62,9 +62,9 @@ def manage_reach_price(breaks: dict, max_position: int) -> np.array:
                         tmp.append((i-max_position+1)+max_position+1)
             while len(tmp) < max_position:
                 tmp.append(0)
-            random = uniform(1, 1.9)
+            random = uniform(1, 1.29)
             tmp_reach.append([int(random * t) for t in tmp])
-            tmp_price.append([int(4.5 * random * t) for t in tmp])
+            tmp_price.append([int(random * t) for t in tmp])
 
     price = np.array(tmp_price)
     reach = np.array(tmp_reach)
@@ -90,20 +90,20 @@ def manage_break_length(breaks: dict, time_scale: int) -> list:
     end_time = 0
     break_length = []
     for key, value in breaks.items():
-        scale = int(key-1) * 3600
+        scale = int(key-1) * 360
         count = value['count']
         for each_count in range(value['count']):
             if each_count <= count // 4:
-                start_time = randint(scale + 0, scale + 900)
+                start_time = randint(scale + 0, scale + 90)
                 end_time = value['length'][each_count] + start_time
             elif count // 4 < each_count <= count // 2:
-                start_time = randint(scale + 900, scale + 1800)
+                start_time = randint(scale + 90, scale + 180)
                 end_time = value['length'][each_count] + start_time
             elif count // 2 < each_count <= count // (3/4):
-                start_time = randint(scale + 1800, scale + 2700)
+                start_time = randint(scale + 180, scale + 270)
                 end_time = value['length'][each_count] + start_time
             elif count // (3/4) < each_count <= count:
-                start_time = randint(scale + 2700, scale + 3450)
+                start_time = randint(scale + 270, scale + 345)
                 end_time = value['length'][each_count] + start_time
             break_length.append(
                 {
@@ -118,24 +118,26 @@ def manage_budget(price: np.array, commercial: dict, budget_chance: list, reach:
     price_mean = int(np.mean(price[price != 0]))+1
     reach_mean = int(np.mean(reach[reach != 0]))+1
     for each_comm in commercial['list']:
-        mean = each_comm['max']
+        # mean = each_comm['max']
+        mean = (each_comm['max'] + each_comm['min']) // 2
         tmp_price = mean * each_comm['duration'] * price_mean
         mean = (each_comm['max'] + each_comm['min']) // 2
         tmp_reach = mean * each_comm['duration'] * reach_mean
-        chance = randint(0, 1)
-        if chance == 0:
-            price_chance = choice(budget_chance)
-            budget = int(tmp_price - (price_chance / 100) * tmp_price)
-        else:
-            price_chance = choice(budget_chance)
-            budget = int(tmp_price + (price_chance / 100) * tmp_price)
-        chance = randint(0, 1)
-        if chance == 0:
-            reach_chance = choice(budget_chance)
-            required_reach = int(tmp_reach + (reach_chance / 100) * tmp_reach)
-        else:
-            reach_chance = choice(budget_chance)
-            required_reach = int(tmp_reach - (reach_chance / 100) * tmp_reach)
+        # chance = randint(0, 1)
+        # if chance == 0:
+        #     price_chance = choice(budget_chance)
+        #     budget = int(tmp_price - (price_chance / 100) * tmp_price)
+        # else:
+        price_chance = choice(budget_chance)
+        budget = int(tmp_price + (price_chance / 100) * tmp_price)
+        # chance = randint(0, 1)
+        # if chance == 0:
+        #     reach_chance = choice(budget_chance)
+        #     required_reach = int(tmp_reach + (reach_chance / 100) * tmp_reach)
+        # else:
+        # reach_chance = choice(budget_chance)
+        reach_chance = randint(5, 10)
+        required_reach = int(tmp_reach - (reach_chance / 100) * tmp_reach)
 
         each_comm['budget'] = budget
         each_comm['required_reach'] = required_reach
@@ -145,6 +147,9 @@ def manage_budget(price: np.array, commercial: dict, budget_chance: list, reach:
 def manage_time(commercial: dict, break_length: list):
     start_time = break_length[0]['start']
     end_time = break_length[-1]['end']
+    for i in range(len(break_length)):
+        if end_time < break_length[i]['end']:
+            end_time = break_length[i]['end']
 
     for i in range(commercial['count']):
         if i < commercial['count'] // 2:
@@ -243,5 +248,11 @@ if __name__ == "__main__":
         "competitors": []
     }
 
-    with open(f"data/small_data_{datetime.now().strftime('%Y_%m_%d__%H_%M_%S')}.json", "w") as json_file:
+    if not path.exists('data'):
+        mkdir('data')
+    if not path.exists(f"data/{datetime.now().strftime('%Y_%m_%d')}"):
+        mkdir(f"data/{datetime.now().strftime('%Y_%m_%d')}")
+
+    with open(f"data/{datetime.now().strftime('%Y_%m_%d')}/"
+              f"small_data_{datetime.now().strftime('%Y_%m_%d__%H_%M_%S')}.json", "w") as json_file:
         json.dump(data, json_file, indent=4)
