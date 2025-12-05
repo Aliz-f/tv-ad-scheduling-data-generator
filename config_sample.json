@@ -1,0 +1,18 @@
+{
+  "scale": "small",
+  "name": "6break-25commercial",
+  "schedule_start_time": "2024-04-11 12:00:00",
+  "schedule_end_time": "2024-04-12 00:00:00",
+  "commercial_count": [3],
+  "commercial_duration": [20, 30],
+  "commercial_minimum_play": [5, 6, 7],
+  "commercial_maximum_play": [8, 9],
+  "break_count": [6],
+  "break_duration": [120, 60],
+  "price_range": [10, 11, 12, 13],
+  "reach_range": [9, 10, 11, 12],
+  "budget_chance": [20, 30, 35, 40],
+  "reach_chance": [20, 30, 35, 40],
+  "penalty": [1, 2, 3, 4],
+  "competitors_count": 0
+}
