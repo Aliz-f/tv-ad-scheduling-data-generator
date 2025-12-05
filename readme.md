@@ -412,4 +412,24 @@ import numpy as np
 random.seed(42)
 np.random.seed(42)
 ```
+---
+
+## Relation to the Overall Project
+
+This MILP model is one of three main components of the TV scheduling thesis project:
+
+1. Data Generator (this repo)
+
+    * Generates synthetic instances (breaks, commercials, budgets, reach, etc.)
+    * Exports JSON for NSGA-II/metaheuristics and for CPLEX (scaled).
+
+2. [**MILP Model**](https://github.com/Aliz-f/tv-ad-scheduling-milp-model)
+
+    * Reads CPLEX-ready JSON.
+    * Solves the scheduling problem exactly (within MIP gap limits).
+
+3. [**Metaheuristic Algorithms**](https://github.com/Aliz-f/tv-ad-scheduling-metaheuristics)
+
+    * NSGA-II, simulated annealing, tabu search.
+    * Use the same data to compare against MILP performance.
 
